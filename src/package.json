@@ -1,0 +1,6 @@
+{
+  "name": "@karmared/kafka-transport",
+  "main": "index.js",
+  "author": "Eugene Kovalev",
+  "license": "MIT"
+}
