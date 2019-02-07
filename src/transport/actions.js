@@ -1,11 +1,12 @@
-import Rx from "rxjs"
 import uuid from "uuid"
-import producer from "./producer"
 import consumer from "./consumer"
+import producer from "./producer"
+import { filter } from "rxjs/operators"
+import { Subject } from "rxjs"
 import { pack, unpack } from "./utils"
 
 
-const Source = new Rx.Subject()
+const Source = new Subject()
 const Subscriptions = new Map()
 
 
@@ -45,7 +46,7 @@ export const push = async (to, payload, key) => {
 
 const subscription = async (from) => {
   await ensureSubscription(from)
-  return Source.filter(payload => payload.topic === from)
+  return Source.pipe(filter(payload => payload.topic === from))
 }
 
 
@@ -61,7 +62,7 @@ export const subscribe = async (from, fn) => {
 export const once = (from, key) => {
   return new Promise(async resolve => {
     const s = (await subscription(from))
-      .filter(({ message }) => message.key === key)
+      .pipe(filter(({ message }) => message.key === key))
       .subscribe(({ message }) => {
         s.unsubscribe()
         resolve(message.value)
@@ -72,6 +73,8 @@ export const once = (from, key) => {
 
 export const fetch = async (to, from, payload) => {
   const key = uuid()
+  await ensureSubscription(from)
+  const answer = once(from, key)
   push(to, payload, key)
-  return once(from, key)
+  return answer
 }
