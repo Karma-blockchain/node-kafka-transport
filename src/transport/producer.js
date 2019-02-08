@@ -1,30 +1,31 @@
 import Kafka from "no-kafka"
 import Config from "./config"
 
-
 const ConfigKeys = ["clientId", "connectionString"]
 
-
-let producer = null
-
-
-const init = () => {
-  if (producer === null) {
-    const config = ConfigKeys.reduce((memo, key) => {
-      memo[key] = Config.get(key)
-      return memo
-    }, {})
-
-    producer = new Promise(resolve => {
-      const instance = new Kafka.Producer(config)
-      instance.init().then(() => resolve(instance))
-    })
-  }
-
-  return producer
+const producer = {
+  config: null,
+  current: null,
 }
 
+const getConfig = () => {
+  return ConfigKeys.reduce((memo, key) => {
+    memo[key] = Config.get(key)
+    return memo
+  }, {})
+}
+
+const getProducer = () => {
+  if (producer.config === null) producer.config = getConfig()
+  return new Kafka.Producer(producer.config)
+}
+
+const init = () => {
+  if (producer.current === null) producer.current = getProducer()
+  producer.current.init()
+  return producer.current
+}
 
 export default {
-  init
+  init,
 }

@@ -1,19 +1,18 @@
 {
   "name": "@karmared/kafka-transport",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "src/index.js",
   "author": "Eugene Kovalev",
   "scripts": {
     "dev": "babel-node src",
-    "build": "rm -rf dist && mkdir dist && babel -q -d dist src && yarn update-package",
-    "update-package": "node scripts/update-package",
-    "publish": "yarn build && cd dist && yarn publish"
+    "build": "mkdir -p dist && NODE_ENV=production babel src -d dist && node scripts/update-package",
+    "update-package": "node scripts/update-package"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-stage-3": "^6.24.1"
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1"
   },
   "license": "MIT",
   "dependencies": {

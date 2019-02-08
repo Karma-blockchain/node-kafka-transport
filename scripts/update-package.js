@@ -1,6 +1,6 @@
 const fs = require("fs")
 const path = require("path")
-const srcPkg = require(path.resolve(process.cwd(), "src", "package.json"))
+const srcPkg = require(path.resolve(process.cwd(), "src", "template.package.json"))
 const rootPkg = require(path.resolve(process.cwd(), "package.json"))
 
 

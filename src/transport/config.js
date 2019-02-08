@@ -9,11 +9,9 @@ const ENV = new Map([
 
 
 const CONFIG = new Map([
-  ["groupId", "kafka-transport-client"],
-  ["clientId", "kafka-transport-group"],
+  ["groupId", "kafka-transport-group"],
+  ["clientId", "kafka-transport-client"],
   ["connectionString", "http://localhost:9092"],
-  ["idleTimeout", 0],
-  ["maxWaitTime", 0],
 ])
 
 

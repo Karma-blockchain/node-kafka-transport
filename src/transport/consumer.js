@@ -1,7 +1,6 @@
 import Kafka from "no-kafka"
 import Config from "./config"
 
-
 const ConfigKeys = [
   "groupId",
   "clientId",
@@ -10,27 +9,29 @@ const ConfigKeys = [
   "maxWaitTime",
 ]
 
-
-let consumer = null
-
-
-const init = () => {
-  if (consumer === null) {
-    const config = ConfigKeys.reduce((memo, key) => {
-      memo[key] = Config.get(key)
-      return memo
-    }, {})
-
-    consumer = new Promise(resolve => {
-      const instance = new Kafka.SimpleConsumer(config)
-      instance.init().then(() => resolve(instance))
-    })
-  }
-
-  return consumer
+const consumer = {
+  config: null,
+  current: null,
 }
 
+const getConfig = () => {
+  return ConfigKeys.reduce((memo, key) => {
+    memo[key] = Config.get(key)
+    return memo
+  }, {})
+}
+
+const getConsumer = () => {
+  if (consumer.config === null) consumer.config = getConfig()
+  return new Kafka.SimpleConsumer(consumer.config)
+}
+
+const init = () => {
+  if (consumer.current === null) consumer.current = getConsumer()
+  consumer.current.init()
+  return consumer.current
+}
 
 export default {
-  init
+  init,
 }
