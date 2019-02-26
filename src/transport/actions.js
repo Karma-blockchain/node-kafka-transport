@@ -22,9 +22,15 @@ const createSubscription = async from => {
 }
 
 const ensureSubscription = async from => {
-  if (Subscriptions.has(from)) return
-  await createSubscription(from)
-  Subscriptions.set(from, true)
+  if (!Subscriptions.has(from)) {
+    Subscriptions.set(
+      from,
+      new Promise(resolve => {
+        createSubscription(from).then(resolve)
+      })
+    )
+  }
+  return Subscriptions.get(from)
 }
 
 const subscription = async from => {
