@@ -11,7 +11,9 @@ describe("Listener", function() {
     before("init kafka", async () => {
       await init({ connectionString: KAFKA_CONNECTION })
 
-      listener = await Listener(TO_TOPIC, FROM_TOPIC)
+      listener = Listener(TO_TOPIC, FROM_TOPIC)
+
+      return listener.subscribed
     })
 
     it("test Listener", function() {
