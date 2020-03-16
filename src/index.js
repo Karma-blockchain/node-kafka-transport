@@ -1,17 +1,5 @@
-import {
-  push,
-  fetch,
-  subscribe,
-} from "./transport/actions"
+import { push, fetch, subscribe } from "./transport/actions"
+import { init } from "./transport/config"
+import Listener from "./transport/listener"
 
-import {
-  init
-} from "./transport/config"
-
-
-export {
-  init,
-  push,
-  fetch,
-  subscribe,
-}
+export { init, push, fetch, subscribe, Listener }

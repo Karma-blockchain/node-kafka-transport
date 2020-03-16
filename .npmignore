@@ -1,0 +1,6 @@
+scripts
+src
+test
+.babelrc.js
+.env
+.prettierrc
