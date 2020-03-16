@@ -9,7 +9,7 @@ export default (consumerTopic, producerTopic) => {
       if (actions[action] == undefined) return
 
       try {
-        let result = await actions[action](data)
+        let result = await actions[action](data, key)
 
         if (producerTopic != undefined && result != undefined)
           push(producerTopic, { data: result }, key)
