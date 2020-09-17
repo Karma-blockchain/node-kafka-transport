@@ -1,4 +1,4 @@
-import Kafka from "no-kafka"
+import { SimpleConsumer } from "no-kafka"
 import Config from "./config"
 
 const ConfigKeys = [
@@ -23,7 +23,7 @@ const getConfig = () => {
 
 const getConsumer = () => {
   if (consumer.config === null) consumer.config = getConfig()
-  return new Kafka.SimpleConsumer(consumer.config)
+  return new SimpleConsumer(consumer.config)
 }
 
 const init = () => {

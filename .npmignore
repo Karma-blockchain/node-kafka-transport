@@ -1,6 +1,7 @@
-scripts
+.github
 src
 test
-.babelrc.js
 .env
 .prettierrc
+tsconfig.json
+yarn-error.*
