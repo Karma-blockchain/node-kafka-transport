@@ -7,6 +7,7 @@ const ConfigKeys = [
   "connectionString",
   "idleTimeout",
   "maxWaitTime",
+  "maxBytes",
 ]
 
 const consumer = {

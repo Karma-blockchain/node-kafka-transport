@@ -1,6 +1,6 @@
 {
   "name": "@karmared/kafka-transport",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "dist/index.js",
   "contributors": [
     "Eugene Kovalev",
