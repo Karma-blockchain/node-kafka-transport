@@ -73,20 +73,20 @@ export const once = async (from, key, _timeout) => {
 
   return new Promise<any>((resolve, reject) => {
     const subs = source
-      .pipe(
+      .pipe<KafkaTopicMessage, KafkaTopicMessage>(
         filter(payload => payload.message.key === key),
-        timeout(_timeout)
+        timeout<KafkaTopicMessage, KafkaTopicMessage>(_timeout)
       )
-      .subscribe(
-        payload => {
+      .subscribe({
+        next: payload => {
           subs.unsubscribe()
           resolve(payload.message.value)
         },
-        err => {
+        error: err => {
           subs.unsubscribe()
           reject(err)
-        }
-      )
+        },
+      })
   })
 }
 

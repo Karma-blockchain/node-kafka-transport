@@ -5,3 +5,4 @@ test
 .prettierrc
 tsconfig.json
 yarn-error.*
+yarn.lock

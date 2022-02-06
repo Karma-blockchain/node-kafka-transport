@@ -1,6 +1,6 @@
 {
   "name": "@karmared/kafka-transport",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "main": "dist/index.js",
   "contributors": [
     "Eugene Kovalev",
@@ -10,14 +10,15 @@
     "build": "mkdir -p dist && NODE_ENV=production tsc"
   },
   "devDependencies": {
+    "@types/node": "^17.0.15",
     "dotenv": "^8.2.0",
     "typescript": "^4.0.2"
   },
   "license": "MIT",
   "dependencies": {
     "msgpack": "^1.0.3",
-    "no-kafka": "^3.4.3",
-    "rxjs": "^6.6.3",
-    "uuid": "^3.4.0"
+    "no-kafka": "^2.8.2",
+    "rxjs": "^7.5.2",
+    "uuid": "^8.3.2"
   }
 }
