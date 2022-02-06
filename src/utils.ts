@@ -1,9 +1,6 @@
-import msgpack from "msgpack"
+import * as msgpack from "msgpack"
 
-
-export const existy = value =>
-  value !== null && value !== void 0
-
+export const existy = value => value !== null && value !== void 0
 
 export const pack = ({ key, payload }) => {
   return {
@@ -11,7 +8,6 @@ export const pack = ({ key, payload }) => {
     value: msgpack.pack(payload),
   }
 }
-
 
 export const unpack = ({ message }) => {
   return {

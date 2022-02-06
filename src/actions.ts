@@ -1,11 +1,21 @@
-import uuid from "uuid"
+import { v4 as uuid } from "uuid"
 import consumer from "./consumer"
 import producer from "./producer"
-import { filter } from "rxjs/operators"
+import { filter, timeout } from "rxjs/operators"
 import { Subject } from "rxjs"
 import { pack, unpack } from "./utils"
 
-const Source = new Subject()
+type KafkaMessage = {
+  key: string
+  value: any
+}
+
+type KafkaTopicMessage = {
+  topic: string
+  message: KafkaMessage
+}
+
+const Source = new Subject<KafkaTopicMessage>()
 const Subscriptions = new Map()
 
 const createSubscription = async from => {
@@ -38,7 +48,7 @@ const subscription = async from => {
   return Source.pipe(filter(payload => payload.topic === from))
 }
 
-export const push = async (to, payload, key) => {
+export const push = async (to: string, payload: any, key: any) => {
   const connection = await producer.init()
 
   return connection.send({
@@ -47,7 +57,7 @@ export const push = async (to, payload, key) => {
   })
 }
 
-export const subscribe = async (from, callback) => {
+export const subscribe = async (from: string, callback) => {
   const source = await subscription(from)
 
   return source.subscribe(payload => {
@@ -58,22 +68,36 @@ export const subscribe = async (from, callback) => {
   })
 }
 
-export const once = async (from, key) => {
+export const once = async (from, key, _timeout) => {
   const source = await subscription(from)
 
-  return new Promise(resolve => {
-    source
-      .pipe(filter(payload => payload.message.key === key))
-      .subscribe(payload => {
-        source.unsubscribe()
-        resolve(payload.message.value)
-      })
+  return new Promise<any>((resolve, reject) => {
+    const subs = source
+      .pipe(
+        filter(payload => payload.message.key === key),
+        timeout(_timeout)
+      )
+      .subscribe(
+        payload => {
+          subs.unsubscribe()
+          resolve(payload.message.value)
+        },
+        err => {
+          subs.unsubscribe()
+          reject(err)
+        }
+      )
   })
 }
 
-export const fetch = async (to, from, payload) => {
+export const fetch = async (
+  to: string,
+  from: string,
+  payload: any,
+  timeout: number = 100000
+) => {
   await ensureSubscription(from)
   const key = uuid()
   push(to, payload, key)
-  return once(from, key)
+  return once(from, key, timeout)
 }

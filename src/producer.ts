@@ -1,4 +1,4 @@
-import Kafka from "no-kafka"
+import { Producer } from "no-kafka"
 import Config from "./config"
 
 const ConfigKeys = ["clientId", "connectionString"]
@@ -17,7 +17,7 @@ const getConfig = () => {
 
 const getProducer = () => {
   if (producer.config === null) producer.config = getConfig()
-  return new Kafka.Producer(producer.config)
+  return new Producer(producer.config)
 }
 
 const init = () => {
